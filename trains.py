@@ -12,7 +12,7 @@ board = darwin_sesh.get_station_board('HMT')
 locationName = board.location_name
 
 # Define font sizes
-FONT_SIZE_LARGE = 36
+FONT_SIZE_LARGE = 25
 FONT_SIZE_SMALL = 18
 
 # Define font paths
@@ -41,7 +41,7 @@ def drawBoard(services, locationName):
     table_widths = [int(inky_display.WIDTH * width) for _, width in table_layout]
 
     # Create new image
-    img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
+    img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT), 1)
 
     # Create drawing object
     draw = ImageDraw.Draw(img)

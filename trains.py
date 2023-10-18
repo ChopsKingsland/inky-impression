@@ -58,7 +58,7 @@ def drawBoard(services, locationName):
     for heading, width in table_layout:
         column_width = int(inky_display.WIDTH * width)
         draw.rectangle((table_x, table_y, table_x + column_width, table_y + FONT_SIZE_LARGE), fill=inky_display.BLACK)
-        draw.text((table_x + 5, table_y), heading, inky_display.WHITE, font=font_bold)
+        draw.text((table_x + 5, table_y), heading, inky_display.BLACK, font=font_bold)
         table_x += column_width
 
     # Draw table rows
@@ -77,7 +77,7 @@ def drawBoard(services, locationName):
                 text = serv.platform
             elif heading == "Expected":
                 text = serv.etd
-            draw.text((column_x + 5, row_y), text, inky_display.BLACK, font=font_regular)
+            draw.text((column_x + 5, row_y), text, inky_display.ORANGE, font=font_regular)
             row_y += FONT_SIZE_SMALL
         table_y += (FONT_SIZE_SMALL * len(table_layout))
 

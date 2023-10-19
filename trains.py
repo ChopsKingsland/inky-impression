@@ -10,14 +10,16 @@ darwin_sesh = DarwinLdbSession(wsdl="https://lite.realtime.nationalrail.co.uk/Op
 board = darwin_sesh.get_station_board('HMT')
 
 locationName = board.location_name
+#print(locationName)
 
 # Define font sizes
 FONT_SIZE_LARGE = 25
-FONT_SIZE_SMALL = 18
+FONT_SIZE_SMALL = 21
 
 # Define font paths
 FONT_BOLD_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-FONT_REGULAR_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+#FONT_REGULAR_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+FONT_REGULAR_PATH = FONT_BOLD_PATH
 
 # Load fonts
 font_bold = ImageFont.truetype(FONT_BOLD_PATH, FONT_SIZE_LARGE)
@@ -26,6 +28,7 @@ font_regular = ImageFont.truetype(FONT_REGULAR_PATH, FONT_SIZE_SMALL)
 
 def getServices():
     services = board.train_services
+    print("got services")
     return services
 
 def drawBoard(services, locationName):        
@@ -58,17 +61,18 @@ def drawBoard(services, locationName):
     for heading, width in table_layout:
         column_width = int(inky_display.WIDTH * width)
         draw.rectangle((table_x, table_y, table_x + column_width, table_y + FONT_SIZE_LARGE), fill=inky_display.BLACK)
-        draw.text((table_x + 5, table_y), heading, inky_display.BLACK, font=font_bold)
+        draw.text((table_x + 5, table_y), heading, inky_display.WHITE, font=font_bold)
         table_x += column_width
 
     # Draw table rows
     table_y += FONT_SIZE_LARGE
     for serv in services:
-        row_y = table_y
+        row_y = table_y + 7
         for i, (heading, width) in enumerate(table_layout):
             column_width = int(inky_display.WIDTH * width)
             column_x = sum(table_widths[:i])
             text = ""
+            colour = inky_display.BLACK
             if heading == "Time":
                 text = serv.std
             elif heading == "Destination":
@@ -77,14 +81,29 @@ def drawBoard(services, locationName):
                 text = serv.platform
             elif heading == "Expected":
                 text = serv.etd
-            draw.text((column_x + 5, row_y), text, inky_display.ORANGE, font=font_regular)
-            row_y += FONT_SIZE_SMALL
-        table_y += (FONT_SIZE_SMALL * len(table_layout))
+                if text == "On time":
+                    colour = inky_display.GREEN
+                elif text == "Delayed":
+                    colour = inky_display.ORANGE
+                elif text == "Cancelled":
+                    colour = inky_display.RED
+                else:
+                    colour = inky_display.ORANGE
+            if text == None:
+                text = ""
+            # print(text)
+            draw.text((column_x + 5, row_y), text, colour, font=font_regular)
+            # row_y += FONT_SIZE_SMALL
+        table_y += (FONT_SIZE_SMALL * len(table_layout))/2
 
     # Display image on Inky pHAT
     inky_display.set_image(img)
     inky_display.show()
 
-services = getServices()
-drawBoard(services, locationName)
 
+def update():
+    services = getServices()
+    drawBoard(services, locationName)
+
+if __name__ == "__main__":
+    update()

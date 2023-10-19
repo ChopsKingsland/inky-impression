@@ -20,11 +20,13 @@ def kelvin_to_fahrenheit(temp):
     return round((temp - 273.15) * 9/5 + 32)
 
 # Function to display weather data on Inky Impression display
+from PIL import Image, ImageDraw, ImageFont
+
 def display_weather():
     inky_display = auto(ask_user=True, verbose=True)
     inky_display.set_border(inky_display.WHITE)
-    img = inky_display.create_image()
-    draw = inky_display.get_drawable(img)
+    img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
+    draw = ImageDraw.Draw(img)
 
     # Get weather data
     data = get_weather()
@@ -33,9 +35,10 @@ def display_weather():
     icon = data["weather"][0]["icon"]
 
     # Draw weather data on display
-    draw.text((10, 10), f"{temp}°F", inky_display.BLACK)
-    draw.text((10, 30), desc, inky_display.BLACK)
-    draw.text((10, 50), datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p"), inky_display.BLACK)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+    draw.text((10, 10), f"{temp}°F", inky_display.BLACK, font=font)
+    draw.text((10, 30), desc, inky_display.BLACK, font=font)
+    draw.text((10, 50), datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p"), inky_display.BLACK, font=font)
     inky_display.set_image(img)
     inky_display.show()
 

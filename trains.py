@@ -3,7 +3,7 @@ import config
 from inky.auto import auto
 from PIL import Image, ImageDraw, ImageFont
 
-inky_display = None
+inky_display = auto(ask_user=True, verbose=True)
 
 darwin_sesh = DarwinLdbSession(wsdl="https://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx", api_key=config.NRE_API_KEY)
 
@@ -102,9 +102,6 @@ def drawBoard(services, locationName):
 
 
 def update():
-    global ink_display
-    inky_display = auto(ask_user=True, verbose=True)
-
     services = getServices()
     drawBoard(services, locationName)
 

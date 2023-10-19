@@ -4,7 +4,7 @@ import datetime
 import config
 
 # Constants
-API_KEY = config.OWN_API_KEY
+API_KEY = config.OWM_API_KEY
 CITY = "Hamstreet"
 UNITS = "metric"
 

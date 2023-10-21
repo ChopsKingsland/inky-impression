@@ -5,7 +5,7 @@ import config
 
 # Constants
 API_KEY = config.OWM_API_KEY
-CITY = "Hamstreet"
+CITY = config.OWM_LOCATION
 UNITS = "metric"
 
 # Function to get weather data from API
@@ -15,9 +15,10 @@ def get_weather():
     data = response.json()
     return data
 
-# Function to convert temperature from Kelvin to Fahrenheit
-def kelvin_to_fahrenheit(temp):
-    return round((temp - 273.15) * 9/5 + 32)
+
+normal36 = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 36)
+extralight24 = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-ExtraLight.ttf", 24)
+bold36 = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 36)
 
 # Function to display weather data on Inky Impression display
 from PIL import Image, ImageDraw, ImageFont
@@ -30,15 +31,26 @@ def display_weather():
 
     # Get weather data
     data = get_weather()
-    temp = kelvin_to_fahrenheit(data["main"]["temp"])
-    desc = data["weather"][0]["description"].title()
+    temp = data["main"]["temp"]
+    maxTemp = data["main"]["temp_max"]
+    minTemp = data["main"]["temp_min"]
+
+    condition = data["weather"][0]["main"]
+    conditionDesc = data["weather"][0]["description"]
     icon = data["weather"][0]["icon"]
+
+    location = data["name"]
 
     # Draw weather data on display
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
-    draw.text((10, 10), f"{temp}°F", inky_display.BLACK, font=font)
-    draw.text((10, 30), desc, inky_display.BLACK, font=font)
-    draw.text((10, 50), datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p"), inky_display.BLACK, font=font)
+    draw.text((35, 30), location, inky_display.BLACK, font=normal36)
+    draw.text((35, 72), f"{temp}°C", inky_display.BLACK, font=extralight24)
+    draw.text((150, 198), condition, inky_display.BLACK, font=bold36)
+    draw.text((150, 240), conditionDesc, inky_display.BLACK, font=normal36)
+
+    # TODO: Draw weather icon
+
+
     inky_display.set_image(img)
     inky_display.show()
 

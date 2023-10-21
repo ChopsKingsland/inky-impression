@@ -2,6 +2,7 @@ import requests
 from inky.auto import auto
 import datetime
 import config
+from PIL import Image, ImageDraw, ImageFont
 
 # Constants
 API_KEY = config.OWM_API_KEY
@@ -21,7 +22,7 @@ extralight24 = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-E
 bold36 = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 36)
 
 # Function to display weather data on Inky Impression display
-from PIL import Image, ImageDraw, ImageFont
+
 
 def display_weather():
     inky_display = auto(ask_user=True, verbose=True)

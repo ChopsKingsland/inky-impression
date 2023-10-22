@@ -27,7 +27,7 @@ bold36 = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.tt
 def display_weather():
     inky_display = auto(ask_user=True, verbose=True)
     inky_display.set_border(inky_display.WHITE)
-    img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
+    img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT), 1)
     draw = ImageDraw.Draw(img)
 
     # Get weather data
@@ -50,6 +50,16 @@ def display_weather():
     draw.text((150, 240), conditionDesc, inky_display.BLACK, font=normal36)
 
     # TODO: Draw weather icon
+    
+    icon = data["weather"][0]["icon"]
+    icon_path = f"weather-icons/{icon}.png"
+    icon = Image.open(icon_path)
+
+    # resize to 97x97
+    icon = icon.resize((97, 97))
+
+    img.paste(icon, (42, 192))
+
 
 
     inky_display.set_image(img)

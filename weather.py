@@ -58,7 +58,7 @@ def display_weather():
     # resize to 97x97
     icon = icon.resize((97, 97))
 
-    img.paste(icon, (42, 192))
+    img.paste(icon, (42, 192), mask="RGBA")
 
 
 
